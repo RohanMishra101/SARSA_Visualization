@@ -1,5 +1,7 @@
 import pygame
 
+# from player import Player
+from src.player import Player
 from src.setting import FPS, HEIGHT, WHITE, WIDTH
 from src.map import Map
 
@@ -7,6 +9,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.map = Map('map_4x4')
+        self.player = Player(self.map)
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
         pygame.display.set_caption("SARSA Visualization using Game")
         self.clock = pygame.time.Clock()

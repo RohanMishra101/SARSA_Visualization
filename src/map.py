@@ -2,6 +2,10 @@ import json
 import pygame
 from src.setting import HEIGHT, MAP_PATH, TILE_TYPE, WIDTH
 
+
+pygame.font.init()
+font = pygame.font.SysFont('Arial', 36)
+
 class Map:
     def __init__(self,map_name):
         self.grid = self.loadMap(MAP_PATH,map_name)
@@ -17,9 +21,8 @@ class Map:
         self.start_pos = self.find_tile('S')
         self.goal_pos = self.find_tile('G')
         
-        self.tile_center_pos = self.get_tile_centers()
-        
-        print(self.tile_center_pos)
+        self.tile_pos = self.get_tile_centers()
+
     
     
     def loadMap(self,path,map_name):
@@ -30,7 +33,7 @@ class Map:
             if m['name'] == map_name:
                 grid =  [list(row) for row in m['grid']]
         
-        # print(grid)
+        print(grid)
         self.validateMap(grid)
         return grid
     
@@ -60,14 +63,18 @@ class Map:
         return None
 
     def get_tile_centers(self):
-        centers = {}
+        tile_pos = {}
         for row in range(self.rows):
             for col in range(self.cols):
+                tile = self.grid[row][col]  # Assuming each cell has one tile type, like 'S', 'E', etc.
                 x = col * self.tile_size + self.tile_size // 2
                 y = row * self.tile_size + self.tile_size // 2
-                centers[(row, col)] = (x, y)
-        return centers
-
+                center = (x, y)
+    
+                if tile not in tile_pos:
+                    tile_pos[tile] = {}
+                tile_pos[tile][(row, col)] = center
+        return tile_pos
     
     def draw(self, surface):
         for row_idx, row in enumerate(self.grid):
@@ -77,6 +84,7 @@ class Map:
                     continue  # Skip drawing
                 x = col_idx * self.tile_size
                 y = row_idx * self.tile_size
+                
                 surface.blit(self.tile_images[cell], (x, y))
                 
                 # Draw semi-transparent border
