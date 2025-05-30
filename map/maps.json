@@ -1,0 +1,59 @@
+{
+    "maps": [
+        {
+            "name": "map_4x4",
+            "size": [
+                4,
+                4
+            ],
+            "grid": [
+                "SEEL",
+                "ETEL",
+                "EEET",
+                "LEEG"
+            ]
+        },
+        {
+            "name": "map_8x8",
+            "size": [
+                8,
+                8
+            ],
+            "grid": [
+                "SEEEEEEL",
+                "ETTTEEEL",
+                "EEEELLEL",
+                "ELEELLEL",
+                "EELEEEEL",
+                "EEELTTTL",
+                "EELEEEEL",
+                "EEEEEEEG"
+            ]
+        },
+        {
+            "name": "map_16x16",
+            "size": [
+                16,
+                16
+            ],
+            "grid": [
+                "SEEEEEELLEEEEETL",
+                "ETTTEEELTETEELEL",
+                "EEEEELELEEETEEEL",
+                "ELEEETEEEELLEEEL",
+                "EELEEETLEEEEETEL",
+                "EEETTTTEEEETTEEL",
+                "EELETLEEELETLEEL",
+                "EEEEETETEEELLEEL",
+                "EETLEEETEEEETLEL",
+                "EEEELTTTEEETTEEL",
+                "EELEEETEELEETLEL",
+                "ETTEEELTEEETLEEL",
+                "EEEETLEEETTTEEEL",
+                "EETLELEEELEETLEL",
+                "EEEETLEEEEEEEEEL",
+                "ELLEEEEELLEEEEEG"
+            ]
+        }
+    ]
+}
