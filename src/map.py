@@ -33,7 +33,7 @@ class Map:
             if m['name'] == map_name:
                 grid =  [list(row) for row in m['grid']]
         
-        print(grid)
+        # print(grid)
         self.validateMap(grid)
         return grid
     
