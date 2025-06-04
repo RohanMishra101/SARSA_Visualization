@@ -24,7 +24,6 @@ class Map:
         self.tile_pos = self.get_tile_centers()
 
     
-    
     def loadMap(self,path,map_name):
         with open(path, 'r') as f:
             data = json.load(f)
@@ -37,6 +36,7 @@ class Map:
         self.validateMap(grid)
         return grid
     
+    
     def loadTileImage(self):
         image = {}
         for symbol, props in TILE_TYPE.items():
@@ -45,6 +45,7 @@ class Map:
             image[symbol] = scaled_img
         
         return image
+    
     
     def validateMap(self,grid):
         flat = [cell for row in grid for cell in row]
@@ -55,12 +56,14 @@ class Map:
             if len(row) != width:
                 raise ValueError("All rows in the map must have the same lenght.")
     
+    
     def find_tile(self, symbol):
         for row_indx, row in enumerate(self.grid):
             for col_indx, cell in enumerate(row):
                 if cell == symbol:
                     return (row_indx, col_indx)
         return None
+
 
     def get_tile_centers(self):
         tile_pos = {}
@@ -76,6 +79,7 @@ class Map:
                 tile_pos[tile][(row, col)] = center
         return tile_pos
     
+    
     def draw(self, surface):
         for row_idx, row in enumerate(self.grid):
             for col_idx, cell in enumerate(row):
@@ -89,7 +93,8 @@ class Map:
                 
                 # Draw semi-transparent border
                 self.draw_tile_border(surface, x, y, self.tile_size, color=(0, 0, 0), alpha=100, border_width=1)
-                
+
+          
     def draw_tile_border(self, surface, x, y, size, color=(0, 0, 0), alpha=100, border_width=1):
         border_surf = pygame.Surface((size, size), pygame.SRCALPHA)
         pygame.draw.rect(border_surf, (*color, alpha), border_surf.get_rect(), border_width)
