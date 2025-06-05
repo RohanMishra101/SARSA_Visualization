@@ -26,9 +26,10 @@ class Agent :
         self.epsilon_end = 0.1
         self.epsilon_decay = 0.999
         self.epsilon = self.epsilon_start
-        self.episode_num = 10
+        self.episode_num = 5000
         self.max_step = 100
         self.current_step = 0
+        self.current_episode = 0
         #callback
         self.draw_callback = None
 
@@ -48,7 +49,8 @@ class Agent :
     
     
     def sarsa_implementaion(self):
-        for episode in range(self.episode_num):
+        while self.current_episode < self.episode_num:
+            self.current_episode += 1
             state = self.reset()
             action = self.e_greedy_policy(state)
             
@@ -66,13 +68,16 @@ class Agent :
                 
                 if self.draw_callback:
                     self.draw_callback()
-                    pygame.time.delay(50)
+                    pygame.time.delay(10)
 
+            yield
+            self.print_value_grid()
+            
             self.epsilon = max(self.epsilon * self.epsilon_decay, self.epsilon_end)
-            
-        self.display_value_function()
-        self.print_value_grid()
-            
+            yield
+        # self.display_value_function()
+        # self.print_value_grid()
+
     
     def step(self, action):
         x, y = self.grid_index
@@ -123,6 +128,7 @@ class Agent :
             self.getCurrentPos()
         self.grid_index = self.starting_pos
         self.current_step = 0
+        self.current_episode = 0
         return self.grid_index
     
     
@@ -130,10 +136,10 @@ class Agent :
         pos_data = self.map_pos_data['S']
         (x_indx,y_indx), (x,y) = next(iter(pos_data.items()))
         self.current_pos = (x,y)
-        self.grid_index = (x_indx,y_indx)
+        current_grid_idx = (x_indx,y_indx)
         # print(f"GRID INDEX : {self.grid_index}")
         
-        self.starting_pos = self.grid_index
+        self.starting_pos = current_grid_idx
         
         return self.current_pos
     
@@ -168,4 +174,5 @@ class Agent :
         pos_y = y - self.agent_height // 2
         
         self.screen.blit(self.agent,(pos_x,pos_y))
+        # self.screen.blit()
         
