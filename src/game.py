@@ -1,6 +1,7 @@
 import pygame
 
 # from player import Player
+from src.Analytic import Analytic
 from src.agent import Agent
 from src.setting import FPS, HEIGHT, WHITE, WIDTH
 from src.map import Map
@@ -9,8 +10,9 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
-        self.map = Map('map_8x8')
+        self.map = Map('map_4x4')
         self.agent = Agent(self.map,self.screen)
+        self.analytic = Analytic(self.screen,self.agent)
         pygame.display.set_caption("SARSA Visualization using Game")
         self.clock = pygame.time.Clock()
         
@@ -40,14 +42,15 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
     
     def draw(self):
         self.screen.fill(WHITE)
+        self.screen.blit(self.font_header.render("SARSA Visualization", True, (0,0,0)), (1300, 0))
+        # self.screen.blit(self.font.render("SARSA Visualization", True, (0,0,0)), (1300, 0))
+        self.screen.blit(self.font.render(self.agent.episode_count, True, (0,0,0)), (1100, 100))
         self.map.draw(self.screen)
         self.agent.draw()
-        
-        self.screen.blit(self.font_header.render("SARSA IMPLEMENTATION",True,(0,0,0)), (1400,50))
-        # self.screen.blit(self.font.render(self.agent.current_episode))
-        
+        self.analytic.draw()
         pygame.display.flip()
         pygame.event.pump()

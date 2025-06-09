@@ -32,6 +32,10 @@ class Agent :
         self.current_episode = 0
         #callback
         self.draw_callback = None
+        
+        #Analytics
+        self.episode_count = ""
+        
 
     
     def loadAgentImage(self):
@@ -51,6 +55,8 @@ class Agent :
     def sarsa_implementaion(self):
         while self.current_episode < self.episode_num:
             self.current_episode += 1
+            print(self.current_episode)
+            self.episode_count = f"Current Episode : {self.current_episode}"
             state = self.reset()
             action = self.e_greedy_policy(state)
             
@@ -61,6 +67,7 @@ class Agent :
                 next_action = self.e_greedy_policy(next_state)
                 
                 # SARSA Update
+                # print(self.Q[state][action])
                 self.Q[state][action] += self.alpha * (reward + self.gamma * self.Q[next_state][next_action] - self.Q[state][action])
                 
                 state = next_state
@@ -69,14 +76,10 @@ class Agent :
                 if self.draw_callback:
                     self.draw_callback()
                     pygame.time.delay(10)
-
-            yield
-            self.print_value_grid()
-            
+                    
+                yield
             self.epsilon = max(self.epsilon * self.epsilon_decay, self.epsilon_end)
             yield
-        # self.display_value_function()
-        # self.print_value_grid()
 
     
     def step(self, action):
@@ -93,14 +96,13 @@ class Agent :
         
         new_index = (x, y)
         self.current_step += 1
-        
         reward = 0
         terminated = False
         truncated = False
         for tile_types, tiles in self.map_pos_data.items():
             if new_index in tiles:
                 walkable = TILE_TYPE[tile_types]['walkable']
-                
+
                 if not walkable:
                     reward -= 1
                     if tile_types == "L":
@@ -124,23 +126,19 @@ class Agent :
       
     
     def reset(self):
-        if self.starting_pos is None:
-            self.getCurrentPos()
-        self.grid_index = self.starting_pos
+        self.getCurrentPos()
         self.current_step = 0
-        self.current_episode = 0
+        self.reached_goal = False
+        
         return self.grid_index
-    
+
     
     def getCurrentPos(self):
         pos_data = self.map_pos_data['S']
-        (x_indx,y_indx), (x,y) = next(iter(pos_data.items()))
-        self.current_pos = (x,y)
-        current_grid_idx = (x_indx,y_indx)
-        # print(f"GRID INDEX : {self.grid_index}")
-        
-        self.starting_pos = current_grid_idx
-        
+        (x_indx, y_indx), (x, y) = next(iter(pos_data.items()))
+        self.starting_pos = (x_indx, y_indx)
+        self.grid_index = self.starting_pos
+        self.current_pos = (x, y)
         return self.current_pos
     
     
@@ -148,19 +146,34 @@ class Agent :
           for state in self.Q.keys():
               best_action = np.argmax(self.Q[state])
               value = np.max(self.Q[state])
-              print(f"V({state}) = {value:.3f}, Best Action = {self.action[best_action]}")
+            #   print(f"V({state}) = {value:.3f}, Best Action = {self.action[best_action]}")
     
     
-    def print_value_grid(self):
-        # size = self.map.size  # Assuming square
-        size = self.map.rows
+    # def get_value_grid(self):
+    #     # size = self.map.size  # Assuming square
+    #     size = self.map.rows
+    #     print("\nValue Grid:")
+    #     for x in range(size):
+    #         for y in range(size):
+    #             state = (x, y)
+    #             value = np.max(self.Q[state]) if state in self.Q else 0.0
+    #             print(f"{value:5.2f}", end=" ")
+    #         print()
+    #     return value
+        
+    def get_value_grid(self):
+        size = self.map.rows  # assuming square
+        value_grid = np.zeros((size, size))
         print("\nValue Grid:")
         for x in range(size):
             for y in range(size):
                 state = (x, y)
                 value = np.max(self.Q[state]) if state in self.Q else 0.0
+                value_grid[x, y] = value
                 print(f"{value:5.2f}", end=" ")
             print()
+        return value_grid
+
     
     
     def set_draw_callback(self, callback):
@@ -172,7 +185,4 @@ class Agent :
         
         pos_x = x - self.agent_width // 2
         pos_y = y - self.agent_height // 2
-        
         self.screen.blit(self.agent,(pos_x,pos_y))
-        # self.screen.blit()
-        
