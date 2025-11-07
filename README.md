@@ -5,7 +5,7 @@
 This project visualizes the workings of the SARSA algorithm — an on-policy temporal-difference learning method — in a simple environment. It lets you watch how an agent learns from the sequence of states and actions, gradually improving its policy and behavior.
 
 ## 🎬 Demo  
-[![Watch the demo](assets/demo_thumbnail.png)](https://github.com/RohanMishra101/SARSA_Visualization/blob/main/README/SARSA_IMPLMENTATION.mov?raw=true)
+![SARSA Demo](assets/SARSA_IMPLMENTATION.gif)
 
 ## 🖼 Visual Snapshot  
 ![Agent Learning Path & Q-Table Heatmap](README/sarsa_visualization.png)  
