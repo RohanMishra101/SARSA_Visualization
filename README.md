@@ -33,4 +33,4 @@ source venv/bin/activate        # on macOS/Linux
 pip install -r requirements.txt
 
 # Run the visualization script
-python main.py                  # or whichever entry file
+python run.py                  # or whichever entry file
